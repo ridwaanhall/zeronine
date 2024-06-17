@@ -2,25 +2,43 @@
 <html>
 <head>
     <title>Digit Recognition</title>
+    <script>
+        async function uploadImage(event) {
+            event.preventDefault();
+            const formData = new FormData(document.querySelector('form'));
+
+            const response = await fetch("{% url 'predict' %}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            });
+
+            const data = await response.json();
+            const resultContainer = document.getElementById('result');
+            resultContainer.innerHTML = '';
+
+            if (data.sorted_predictions) {
+                const list = document.createElement('ul');
+                data.sorted_predictions.forEach(([label, probability]) => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${label}: ${(probability * 100).toFixed(5)}%`;
+                    list.appendChild(listItem);
+                });
+                resultContainer.appendChild(list);
+            } else {
+                resultContainer.textContent = 'Error in prediction.';
+            }
+        }
+    </script>
 </head>
 <body>
     <h1>Upload an Image for Digit Recognition</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
+    <form method="post" enctype="multipart/form-data" onsubmit="uploadImage(event)">
         <input type="file" name="image">
         <button type="submit">Upload</button>
     </form>
-
-    {% if img_url %}
-        <h2>Uploaded Image:</h2>
-        <img src="{{ img_url }}" alt="Uploaded Image">
-
-        <h2>Predictions:</h2>
-        <ul>
-            {% for label, probability in sorted_predictions %}
-                <li>{{ label }}: {{ probability|floatformat:5 }}%</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+    <div id="result"></div>
 </body>
 </html>
