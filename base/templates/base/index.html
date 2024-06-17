@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Digit Recognition</title>
+</head>
+<body>
+    <h1>Upload an Image for Digit Recognition</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="image">
+        <button type="submit">Upload</button>
+    </form>
+
+    {% if img_url %}
+        <h2>Uploaded Image:</h2>
+        <img src="{{ img_url }}" alt="Uploaded Image">
+
+        <h2>Predictions:</h2>
+        <ul>
+            {% for label, probability in sorted_predictions %}
+                <li>{{ label }}: {{ probability|floatformat:5 }}%</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>
