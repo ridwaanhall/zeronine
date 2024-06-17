@@ -1,19 +1,30 @@
 from django.shortcuts import render
-from django.core.files.storage import FileSystemStorage
-from .model import predict_image
+from django.http import JsonResponse
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+from PIL import Image
+import io
+from .model import predict
 
 def index(request):
-    if request.method == 'POST' and request.FILES['image']:
-        uploaded_file = request.FILES['image']
-        fs = FileSystemStorage()
-        img_path = fs.save(uploaded_file.name, uploaded_file)
-        img_url = fs.url(img_path)
-        
-        sorted_predictions = predict_image(fs.path(img_path))
+    return render(request, 'base/index.html')
 
-        return render(request, 'base/index.html', {
-            'img_url': img_url,
+def predict_view(request):
+    if request.method == 'POST' and request.FILES.get('image'):
+        uploaded_file = request.FILES['image']
+
+        image_content = uploaded_file.read()
+        image_file = io.BytesIO(image_content)
+
+        img = Image.open(image_file)
+        sorted_predictions = predict(img)
+
+        # Convert float32 to float
+        sorted_predictions = [(label, float(probability)) for label, probability in sorted_predictions]
+
+        return JsonResponse({
             'sorted_predictions': sorted_predictions
         })
-    
-    return render(request, 'base/index.html')
+    return JsonResponse({
+        'error': 'Invalid request'
+    }, status=400)
