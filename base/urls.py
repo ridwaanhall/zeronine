@@ -3,6 +3,5 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('index2/', views.index2, name='index2'),
-    path('predict/', views.predict_view, name='predict'),
+    path('predict/', views.predict_view, name='predictZeronineEN'),
 ]
