@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from django.core.files.storage import default_storage
-from django.core.files.base import ContentFile
 from PIL import Image
 import io
 from .model import predict
 
 def index(request):
+    return render(request, 'base/index2.html')
+
+def index2(request):
     return render(request, 'base/index.html')
 
 def predict_view(request):
