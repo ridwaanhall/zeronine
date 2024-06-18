@@ -24,7 +24,7 @@
                 </button>
                 <button type="button" class="btn btn-danger btn-icon-split" onclick="clearResults()">
                     <span class="icon text-white-50">
-                        <i class="fas fa-trash"></i>
+                        <i class="fas fa-trash-can"></i>
                     </span>
                     <span class="text">Clear</span>
                 </button>
@@ -39,18 +39,17 @@
                 </div>
                 <div class="card-body">
                     <div class="text-center">
-                        <img id="uploadedImage" class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 14rem;" alt="Uploaded Image" />
+                        <img id="uploadedImage" class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="height: 13rem;" alt="Uploaded Image" />
                     </div>
-                    <p>
-                        <span id="fileName">File Name: </span><br>
-                        <span id="fileSize">File Size: </span><br>
-                        <span id="fileType">File Type: </span>
+                    <p class="mb-0">
+                        <span id="fileName">File Name: None</span><br>
+                        <span id="fileSize">File Size: None</span><br>
+                        <span id="fileType">File Type: None</span>
                     </p>
-                    <a target="_blank" rel="nofollow" href="https://github.com/ridwaanhall/zeronine">View code on GitHub &rarr;</a>
                 </div>
             </div>
         </div>
-
+        
         <div class="col-lg-6 mb-4">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
@@ -95,7 +94,7 @@
 
             if (data.sorted_predictions) {
                 data.sorted_predictions.slice(0, 5).forEach(([label, probability]) => {
-                    const percentage = (probability * 100).toFixed(2);
+                    const percentage = (probability * 100).toFixed(5);
                     let progressBarClass = 'bg-danger';
                     if (percentage > 80) {
                         progressBarClass = 'bg-success';
