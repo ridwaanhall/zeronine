@@ -6,8 +6,8 @@ import io
 import json
 from .model import predict
 
-def index(request):
-    return render(request, 'base/index.html')
+def zeronine_en(request):
+    return render(request, 'base/zeronine-en.html')
 
 def predict_view(request):
     if request.method == 'POST':
