@@ -6,7 +6,7 @@
 
 {% block content %}
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Upload an Image for Digit Recognition</h1>
+        <h1 class="h3 mb-0 text-gray-800">Zeronine</h1>
         <div>
             <form id="uploadForm" enctype="multipart/form-data">
                 <button type="button" class="btn btn-info btn-icon-split mr-2" onclick="document.getElementById('imageInput').click()">
@@ -35,17 +35,28 @@
         <div class="col-lg-6 mb-4">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Image</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Image Details</h6>
                 </div>
                 <div class="card-body">
                     <div class="text-center">
                         <img id="uploadedImage" class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="height: 13rem;" alt="Uploaded Image" />
                     </div>
-                    <p class="mb-0">
-                        <span id="fileName">File Name: None</span><br>
-                        <span id="fileSize">File Size: None</span><br>
-                        <span id="fileType">File Type: None</span>
-                    </p>
+                    <table class="table mb-0">
+                        <tbody>
+                            <tr>
+                                <td>File Name</td>
+                                <td id="fileName">None</td>
+                            </tr>
+                            <tr>
+                                <td>File Size</td>
+                                <td id="fileSize">None</td>
+                            </tr>
+                            <tr>
+                                <td>File Type</td>
+                                <td id="fileType">None</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -66,9 +77,9 @@
         function handleFileChange(event) {
             const file = event.target.files[0];
             if (file) {
-                document.getElementById('fileName').textContent = 'File Name: ' + file.name;
-                document.getElementById('fileSize').textContent = 'File Size: ' + (file.size / 1024).toFixed(2) + ' KB';
-                document.getElementById('fileType').textContent = 'File Type: ' + file.type;
+                document.getElementById('fileName').textContent = file.name;
+                document.getElementById('fileSize').textContent = (file.size / 1024).toFixed(2) + ' KB';
+                document.getElementById('fileType').textContent = file.type;
                 document.getElementById('uploadedImage').src = URL.createObjectURL(file);
             }
         }
@@ -93,7 +104,7 @@
             resultContainer.innerHTML = '';
 
             if (data.sorted_predictions) {
-                data.sorted_predictions.slice(0, 5).forEach(([label, probability]) => {
+                data.sorted_predictions.slice(0, 6).forEach(([label, probability]) => {
                     const percentage = (probability * 100).toFixed(5);
                     let progressBarClass = 'bg-danger';
                     if (percentage > 80) {
@@ -120,9 +131,9 @@
         });
 
         function clearResults() {
-            document.getElementById('fileName').textContent = 'File Name: ';
-            document.getElementById('fileSize').textContent = 'File Size: ';
-            document.getElementById('fileType').textContent = 'File Type: ';
+            document.getElementById('fileName').textContent = 'None';
+            document.getElementById('fileSize').textContent = 'None';
+            document.getElementById('fileType').textContent = 'None';
             document.getElementById('uploadedImage').src = '';
             document.getElementById('imageInput').value = '';
             document.getElementById('predictionResults').innerHTML = '';
