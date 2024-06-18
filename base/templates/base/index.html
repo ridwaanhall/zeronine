@@ -1,44 +1,47 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Digit Recognition</title>
-    <script>
-        async function uploadImage(event) {
-            event.preventDefault();
-            const formData = new FormData(document.querySelector('form'));
+{% extends 'base/main.html' %}
 
-            const response = await fetch("{% url 'predict' %}", {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}'
-                }
-            });
+{% block title %}Digit Recognition{% endblock %}
 
-            const data = await response.json();
-            const resultContainer = document.getElementById('result');
-            resultContainer.innerHTML = '';
+{% block head %}
 
-            if (data.sorted_predictions) {
-                const list = document.createElement('ul');
-                data.sorted_predictions.forEach(([label, probability]) => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = `${label}: ${(probability * 100).toFixed(5)}%`;
-                    list.appendChild(listItem);
-                });
-                resultContainer.appendChild(list);
-            } else {
-                resultContainer.textContent = 'Error in prediction.';
+<script>
+    async function uploadImage(event) {
+        event.preventDefault();
+        const formData = new FormData(document.querySelector('form'));
+
+        const response = await fetch("{% url 'predict' %}", {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
             }
+        });
+
+        const data = await response.json();
+        const resultContainer = document.getElementById('result');
+        resultContainer.innerHTML = '';
+
+        if (data.sorted_predictions) {
+            const list = document.createElement('ul');
+            data.sorted_predictions.forEach(([label, probability]) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${label}: ${(probability * 100).toFixed(10)}%`;
+                list.appendChild(listItem);
+            });
+            resultContainer.appendChild(list);
+        } else {
+            resultContainer.textContent = 'Error in prediction.';
         }
-    </script>
-</head>
-<body>
+    }
+</script>
+
+{% endblock %}
+
+{% block content %}
     <h1>Upload an Image for Digit Recognition</h1>
     <form method="post" enctype="multipart/form-data" onsubmit="uploadImage(event)">
         <input type="file" name="image">
         <button type="submit">Upload</button>
     </form>
     <div id="result"></div>
-</body>
-</html>
+{% endblock %}
