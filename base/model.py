@@ -2,7 +2,7 @@ import numpy as np
 from tensorflow.keras.preprocessing import image
 import tensorflow as tf
 
-model = tf.keras.models.load_model('model/zeronine.h5')
+model_zeronine = tf.keras.models.load_model('model/zeronine.h5')
 class_labels = ['eight', 'five', 'four', 'nine', 'one', 'seven', 'six', 'three', 'two', 'zero']
 
 def predict(img):
@@ -14,7 +14,7 @@ def predict(img):
 
     img_tensor /= 255.
 
-    prediction = model.predict(img_tensor)
+    prediction = model_zeronine.predict(img_tensor)
 
     probabilities = prediction[0]
 
