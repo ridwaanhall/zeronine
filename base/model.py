@@ -2,7 +2,7 @@ import numpy as np
 from tensorflow.keras.preprocessing import image
 import tensorflow as tf
 
-model = tf.keras.models.load_model('zeronine.h5')
+model = tf.keras.models.load_model('model/zeronine.h5')
 class_labels = ['eight', 'five', 'four', 'nine', 'one', 'seven', 'six', 'three', 'two', 'zero']
 
 def predict(img):
