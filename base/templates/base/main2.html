@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="digit recognition using CNN model">
     <meta name="author" content="ridwaanhall">
-
+    <link rel="icon" href="{% static 'favicon/favicon.ico' %}">
     <title>{% block title %}My Site{% endblock %} - Zeronine</title>
     {% block head %}{% endblock %}
     <script src="https://kit.fontawesome.com/17dd18b72c.js" crossorigin="anonymous"></script>
@@ -54,6 +54,9 @@
     <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
     <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
     {% block script %}
     {% endblock %}
 </body>
