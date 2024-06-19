@@ -9,20 +9,6 @@
 
     <hr class="sidebar-divider">
 
-    <!-- <li class="nav-item {% if request.resolver_match.url_name == 'ZeronineEN' %}active{% endif %}">
-        <a class="nav-link" href="{% url 'ZeronineEN' %}">
-            <i class="fas fa-fw fa-robot"></i>
-            <span>Zeronine (EN)</span>
-        </a>
-    </li>
-
-    <li class="nav-item">
-        <a class="nav-link" href="#">
-            <i class="fas fa-fw fa-robot"></i>
-            <span>Zeronine (AR)</span>
-        </a>
-    </li> -->
-
     <div class="sidebar-heading">
         Choose Handwritten:
     </div>
@@ -35,7 +21,6 @@
         <div id="ZeronineDigitsApp" class="collapse {% if request.resolver_match.url_name == 'ZeronineEN' or request.resolver_match.url_name == 'ZeronineAR' %}show{% endif %}" aria-labelledby="headingZeronine"
             data-parent="#zeronineSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <!-- <h6 class="collapse-header">Choose Zeronine:</h6> -->
                 <a class="collapse-item {% if request.resolver_match.url_name == 'ZeronineEN' %}active{% endif %}" href="{% url 'ZeronineEN' %}">EN</a>
                 <a class="collapse-item {% if request.resolver_match.url_name == 'ZeronineAR' %}active{% endif %}" href="{% url 'ZeronineAR' %}">AR</a>
             </div>
