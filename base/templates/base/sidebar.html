@@ -24,20 +24,35 @@
     </li> -->
 
     <div class="sidebar-heading">
-        Choose Handwritten Digits:
+        Choose Handwritten:
     </div>
 
     <li class="nav-item {% if request.resolver_match.url_name == 'ZeronineEN' or request.resolver_match.url_name == 'ZeronineAR' %}active{% endif %}">
-        <a class="nav-link" href="#" data-toggle="collapse" data-target="#ZeronineApp" aria-expanded="true" aria-controls="ZeronineApp">
+        <a class="nav-link {% if request.resolver_match.url_name != 'ZeronineEN' and request.resolver_match.url_name != 'ZeronineAR' %}collapsed{% endif %}" href="#" data-toggle="collapse" data-target="#ZeronineDigitsApp" aria-expanded="true" aria-controls="ZeronineDigitsApp">
             <i class="fas fa-fw fa-arrow-up-1-9"></i>
             <span>Handwritten Digits</span>
         </a>
-        <div id="ZeronineApp" class="collapse {% if request.resolver_match.url_name == 'ZeronineEN' or request.resolver_match.url_name == 'ZeronineAR' %}show{% endif %}" aria-labelledby="headingUtilities"
+        <div id="ZeronineDigitsApp" class="collapse {% if request.resolver_match.url_name == 'ZeronineEN' or request.resolver_match.url_name == 'ZeronineAR' %}show{% endif %}" aria-labelledby="headingZeronine"
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <!-- <h6 class="collapse-header">Choose Zeronine:</h6> -->
                 <a class="collapse-item {% if request.resolver_match.url_name == 'ZeronineEN' %}active{% endif %}" href="{% url 'ZeronineEN' %}">EN</a>
                 <a class="collapse-item {% if request.resolver_match.url_name == 'ZeronineAR' %}active{% endif %}" href="{% url 'ZeronineAR' %}">AR</a>
+            </div>
+        </div>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#ZeronineCharactersApp"
+            aria-expanded="true" aria-controls="ZeronineCharactersApp">
+            <i class="fas fa-fw fa-wrench"></i>
+            <span>Handwritten Characters</span>
+        </a>
+        <div id="ZeronineCharactersApp" class="collapse" aria-labelledby="headingZeronine"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item" href="#">EN</a>
+                <a class="collapse-item" href="#">AR</a>
             </div>
         </div>
     </li>
