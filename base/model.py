@@ -4,7 +4,8 @@ import tensorflow as tf
 from scipy import ndimage
 
 model_zeronine_en = tf.keras.models.load_model('model/zeronine_en.h5')
-class_labels_en = ['eight', 'five', 'four', 'nine', 'one', 'seven', 'six', 'three', 'two', 'zero']
+# class_labels_en = ['eight', 'five', 'four', 'nine', 'one', 'seven', 'six', 'three', 'two', 'zero']
+class_labels_en = ['8', '5', '4', '9', '1', '7', '6', '3', '2', '0']
 
 model_zeronine_ar = tf.keras.models.load_model('model/zeronine_ar.h5')
 
@@ -33,7 +34,7 @@ def predict_en(img):
         print(f"Error in predict_test: {e}")
         return []
     
-def preprocess_image(img):
+def preprocess_image_ar(img):
     """Preprocess the image to the format expected by the model."""
     img = img.convert('L')  # Convert image to grayscale
     img = img.resize((28, 28))  # Resize image to 28x28 pixels
@@ -46,7 +47,7 @@ def preprocess_image(img):
 
 def predict_ar(img):
     """Predict the digit from the provided image and return probabilities."""
-    processed_img = preprocess_image(img)
+    processed_img = preprocess_image_ar(img)
     prediction = model_zeronine_ar.predict(processed_img)
     probabilities = prediction[0]
     sorted_predictions = sorted(enumerate(probabilities), key=lambda x: x[1], reverse=True)
