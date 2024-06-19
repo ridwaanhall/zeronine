@@ -6,7 +6,7 @@
 
 {% block content %}
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Zeronine</h1>
+        <h1 class="h3 mb-0 text-gray-800">Arabic Handwritten Digits</h1>
         <div>
             <button type="button" class="btn btn-primary btn-icon-split mr-2" onclick="toggleMode()">
                 <span class="icon text-white-50">
@@ -203,7 +203,7 @@
             event.preventDefault();
     
             const formData = new FormData(document.getElementById('uploadForm'));
-            const response = await fetch("{% url 'PredictZeronineEN' %}", {
+            const response = await fetch("{% url 'PredictZeronineAR' %}", {
                 method: 'POST',
                 body: formData,
                 headers: {
@@ -217,7 +217,7 @@
     
         async function predictDrawing() {
             const dataURL = canvas.toDataURL('image/png');
-            const response = await fetch("{% url 'PredictZeronineEN' %}", {
+            const response = await fetch("{% url 'PredictZeronineAR' %}", {
                 method: 'POST',
                 body: JSON.stringify({ image: dataURL }),
                 headers: {
