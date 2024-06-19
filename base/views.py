@@ -47,19 +47,29 @@ def predict_zeronine_en(request):
 
 def predict_zeronine_ar(request):
     if request.method == 'POST':
-        image_data = request.POST.get('image')
-        
-        if not image_data:
-            image_file = request.FILES.get('image')
-            if not image_file:
-                return JsonResponse({'error': 'No image provided'}, status=400)
-            img = Image.open(image_file)
-        else:
-            image_data = image_data.split(',')[1]
-            image_data = base64.b64decode(image_data)
-            img = Image.open(io.BytesIO(image_data))
-        
-        sorted_predictions = predict_ar(img)
-        response_data = {'sorted_predictions': [(str(label), float(probability)) for label, probability in sorted_predictions]}
-        return JsonResponse(response_data)
+        try:
+            if 'image' in request.FILES:
+                uploaded_file = request.FILES['image']
+                image_content = uploaded_file.read()
+                image_file = io.BytesIO(image_content)
+                img = Image.open(image_file)
+            else:
+                data = json.loads(request.body.decode('utf-8'))
+                image_data = data.get('image').split(',')[1]
+                image_content = base64.b64decode(image_data)
+                image_file = io.BytesIO(image_content)
+                img = Image.open(image_file)
+
+            sorted_predictions = predict_ar(img)
+
+            if not sorted_predictions:
+                return JsonResponse({'error': 'Prediction failed'}, status=500)
+
+            sorted_predictions = [(label, float(probability)) for label, probability in sorted_predictions]
+
+            return JsonResponse({'sorted_predictions': sorted_predictions})
+        except Exception as e:
+            print(f"Error in predict_zeronine_ar: {e}")
+            return JsonResponse({'error': str(e)}, status=500)
+
     return JsonResponse({'error': 'Invalid request'}, status=400)
