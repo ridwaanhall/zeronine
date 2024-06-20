@@ -1,12 +1,12 @@
 {% extends 'base/main.html' %}
 
-{% block title %}AR{% endblock %}
+{% block title %}Eastern Arabic{% endblock %}
 
 {% block head %}{% endblock %}
 
 {% block content %}
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Arabic Handwritten Digits</h1>
+        <h1 class="h3 mb-0 text-gray-800">Eastern Arabic Handwritten Digits</h1>
         <div>
             <button type="button" class="btn btn-primary btn-icon-split mr-2" onclick="toggleMode()">
                 <span class="icon text-white-50">
@@ -118,7 +118,8 @@
                         <h6 class="m-0 font-weight-bold text-primary">Draw Digit</h6>
                     </div>
                     <div class="card-body">
-                        <div class="text-center">
+                        Make sure that the digits you draw are exactly in the center so they can be read by the AI. Additionally, ensure that the size and thickness of the digits are consistent to improve readability.
+                        <div class="text-center mt-2">
                             <canvas id="drawCanvas" class="border" width="150" height="150" style="cursor: crosshair;"></canvas>
                         </div>
                     </div>
