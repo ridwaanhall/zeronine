@@ -27,17 +27,17 @@
         </div>
     </li>
 
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#ZeronineCharactersApp"
+    <li class="nav-item {% if request.resolver_match.url_name == 'ZeronineARChar' %}active{% endif %}">
+        <a class="nav-link {% if request.resolver_match.url_name == 'ZeronineARChar' %}collapsed{% endif %}" href="#" data-toggle="collapse" data-target="#ZeronineCharactersApp"
             aria-expanded="true" aria-controls="ZeronineCharactersApp">
             <i class="fas fa-fw fa-wrench"></i>
-            <span>Handwritten Characters</span>
+            <span>Handwritten Chars</span>
         </a>
-        <div id="ZeronineCharactersApp" class="collapse" aria-labelledby="headingZeronine"
+        <div id="ZeronineCharactersApp" class="collapse {% if request.resolver_match.url_name == 'ZeronineARChar' %}show{% endif %}" aria-labelledby="headingZeronine"
             data-parent="#zeronineSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item" href="#">Hindu-Arabic</a>
-                <a class="collapse-item" href="#">Eastern Arabic</a>
+                <a class="collapse-item {% if request.resolver_match.url_name == 'ZeronineARChar' %}active{% endif %}" href="{% url 'ZeronineARChar' %}">Eastern Arabic</a>
             </div>
         </div>
     </li>
