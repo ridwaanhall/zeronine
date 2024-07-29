@@ -1,0 +1,279 @@
+{% extends 'base/main.html' %}
+
+{% block title %}Eastern Arabic{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block content %}
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Eastern Arabic Handwritten Characters (Val Acc 81%)</h1>
+        <div>
+            <button type="button" class="btn btn-primary btn-icon-split mr-2" onclick="toggleMode()">
+                <span class="icon text-white-50">
+                    <i class="fas fa-sync"></i>
+                </span>
+                <span class="text" id="modeButtonText">Switch to Draw</span>
+            </button>
+        </div>
+    </div>
+    
+    <div id="uploadSection">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <div>
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <button type="button" class="btn btn-info btn-icon-split mr-2" onclick="document.getElementById('imageInput').click()">
+                        <span class="icon text-white-50">
+                            <i class="fas fa-upload"></i>
+                        </span>
+                        <span class="text">Upload</span>
+                    </button>
+                    <input type="file" name="image" id="imageInput" style="display:none;" onchange="handleFileChange(event)">
+                    <button type="submit" class="btn btn-success btn-icon-split mr-2">
+                        <span class="icon text-white-50">
+                            <i class="fas fa-repeat"></i>
+                        </span>
+                        <span class="text">Predict</span>
+                    </button>
+                    <button type="button" class="btn btn-danger btn-icon-split" onclick="clearResults()">
+                        <span class="icon text-white-50">
+                            <i class="fas fa-trash-can"></i>
+                        </span>
+                        <span class="text">Clear</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <div class="h-100 card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Image Details</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center">
+                            <img id="uploadedImage" class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="height: 12rem;" alt="Uploaded Image" />
+                        </div>
+                        <table class="table mb-0">
+                            <tbody>
+                                <tr>
+                                    <td>File Name</td>
+                                    <td id="fileName">None</td>
+                                </tr>
+                                <tr>
+                                    <td>File Size</td>
+                                    <td id="fileSize">None</td>
+                                </tr>
+                                <tr>
+                                    <td>File Type</td>
+                                    <td id="fileType">None</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6 mb-4">
+                <div class="h-100 card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Predict Result (Upload)</h6>
+                    </div>
+                    <div class="card-body" id="uploadPredictionResults">
+                        <!-- Prediction results will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="drawSection" style="display: none;">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <div>
+                <button class="btn btn-info btn-icon-split mr-2" onclick="clearCanvas()">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-eraser"></i>
+                    </span>
+                    <span class="text">Eraser</span>
+                </button>
+                <button class="btn btn-success btn-icon-split mr-2" onclick="predictDrawing()">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-repeat"></i>
+                    </span>
+                    <span class="text">Predict</span>
+                </button>
+                <button type="button" class="btn btn-danger btn-icon-split" onclick="clearResults()">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-trash-can"></i>
+                    </span>
+                    <span class="text">Clear</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <div class="h-100 card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Draw Digit</h6>
+                    </div>
+                    <div class="card-body">
+                        Make sure that the Characters you draw are exactly in the center so they can be read by the AI. Additionally, ensure that the size and thickness of the Characters are consistent to improve readability.
+                        <div class="text-center mt-2">
+                            <canvas id="drawCanvas" class="border" width="150" height="150" style="cursor: crosshair;"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6 mb-4">
+                <div class="h-100 card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Predict Result (Draw)</h6>
+                    </div>
+                    <div class="card-body" id="drawPredictionResults">
+                        <!-- Prediction results will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isDrawing = false;
+        const canvas = document.getElementById('drawCanvas');
+        const ctx = canvas.getContext('2d');
+    
+        // Initialize canvas with white background
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+        function toggleMode() {
+            const uploadSection = document.getElementById('uploadSection');
+            const drawSection = document.getElementById('drawSection');
+            const modeButtonText = document.getElementById('modeButtonText');
+            
+            if (uploadSection.style.display === 'none') {
+                uploadSection.style.display = 'block';
+                drawSection.style.display = 'none';
+                modeButtonText.textContent = 'Switch to Draw';
+            } else {
+                uploadSection.style.display = 'none';
+                drawSection.style.display = 'block';
+                modeButtonText.textContent = 'Switch to Upload';
+            }
+            clearResults();
+        }
+    
+        canvas.addEventListener('mousedown', () => isDrawing = true);
+        canvas.addEventListener('mouseup', () => {
+            isDrawing = false;
+            ctx.beginPath();
+        });
+        canvas.addEventListener('mousemove', draw);
+    
+        function draw(event) {
+            if (!isDrawing) return;
+            ctx.lineWidth = 10;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = 'black';
+    
+            ctx.lineTo(event.offsetX, event.offsetY);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(event.offsetX, event.offsetY);
+        }
+    
+        function clearCanvas() {
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+        }
+    
+        function handleFileChange(event) {
+            const file = event.target.files[0];
+            if (file) {
+                document.getElementById('fileName').textContent = file.name;
+                document.getElementById('fileSize').textContent = (file.size / 1024).toFixed(2) + ' KB';
+                document.getElementById('fileType').textContent = file.type;
+                document.getElementById('uploadedImage').src = URL.createObjectURL(file);
+            }
+        }
+    
+        document.getElementById('uploadForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+    
+            const formData = new FormData(document.getElementById('uploadForm'));
+            const response = await fetch("{% url 'PredictZeronineARChar' %}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            });
+    
+            const data = await response.json();
+            displayPredictionResults(data, 'uploadPredictionResults');
+        });
+    
+        async function predictDrawing() {
+            const dataURL = canvas.toDataURL('image/png');
+            const response = await fetch("{% url 'PredictZeronineARChar' %}", {
+                method: 'POST',
+                body: JSON.stringify({ image: dataURL }),
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                }
+            });
+    
+            const data = await response.json();
+            displayPredictionResults(data, 'drawPredictionResults');
+        }
+    
+        function displayPredictionResults(data, resultContainerId) {
+            console.log('Display Prediction Results:', data);  // Log the data
+            const resultContainer = document.getElementById(resultContainerId);
+            console.log('Result Container:', resultContainer);  // Log the container element
+            resultContainer.innerHTML = '';
+    
+            if (data.sorted_predictions) {
+                data.sorted_predictions.slice(0, 6).forEach(([label, probability]) => {
+                    const percentage = (probability * 100).toFixed(2);
+                    let progressBarClass = 'bg-danger';
+                    if (percentage > 80) {
+                        progressBarClass = 'bg-success';
+                    } else if (percentage > 60) {
+                        progressBarClass = 'bg-info';
+                    } else if (percentage > 40) {
+                        progressBarClass = '';
+                    } else if (percentage > 20) {
+                        progressBarClass = 'bg-warning';
+                    }
+    
+                    const progressHtml = `
+                        <h4 class="small font-weight-bold">${label} <span class="float-right">${percentage}%</span></h4>
+                        <div class="progress mb-4">
+                            <div class="progress-bar ${progressBarClass}" role="progressbar" style="width: ${percentage}%;" aria-valuenow="${percentage}" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    `;
+                    resultContainer.innerHTML += progressHtml;
+                });
+            } else {
+                resultContainer.textContent = 'Error in prediction.';
+            }
+        }
+    
+        function clearResults() {
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            document.getElementById('uploadPredictionResults').innerHTML = '';
+            document.getElementById('drawPredictionResults').innerHTML = '';
+            document.getElementById('fileName').textContent = 'None';
+            document.getElementById('fileSize').textContent = 'None';
+            document.getElementById('fileType').textContent = 'None';
+            document.getElementById('uploadedImage').src = '';
+        }
+    </script>
+{% endblock %}
