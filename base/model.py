@@ -7,12 +7,15 @@ from scipy import ndimage
 # class_labels_en = ['eight', 'five', 'four', 'nine', 'one', 'seven', 'six', 'three', 'two', 'zero']
 # model
 model_zeronine_en_num = tf.keras.models.load_model('model/zeronine_en_num.h5')
+model_zeronine_en_char = tf.keras.models.load_model('model/zeronine_en_char.h5')
 model_zeronine_ar_num = tf.keras.models.load_model('model/zeronine_ar_num.h5')
 model_zeronine_ar_char = tf.keras.models.load_model('model/zeronine_ar_char.h5')
 
 
 # class labels
 class_labels_en = ['8', '5', '4', '9', '1', '7', '6', '3', '2', '0']
+class_labels_en_chars = [str(i) for i in range(10)] + [chr(i) for i in range(65, 91)] + [chr(i) for i in range(97, 123)]
+
 
 class ArabicLabelHandler:
     def __init__(self):
@@ -79,6 +82,32 @@ def predict_en_num(img):
     except Exception as e:
         print(f"Error in predict_test: {e}")
         return []
+
+def predict_en_char(img):
+    try:
+        # Convert image to grayscale if necessary
+        if img.mode != 'L':  # 'L' mode is grayscale
+            img = img.convert('L')
+        
+        img = img.resize((64, 64))
+        img_tensor = image.img_to_array(img)
+        img_tensor = np.expand_dims(img_tensor, axis=0)
+        img_tensor /= 255.0  # Normalize the image
+
+        prediction = model_zeronine_en_char.predict(img_tensor)
+        probabilities = prediction[0]
+
+        sorted_predictions = sorted(
+            zip(class_labels_en_chars, probabilities),
+            key=lambda x: x[1],
+            reverse=True
+        )
+
+        return sorted_predictions
+    except Exception as e:
+        print(f"Error in predict_test: {e}")
+        return []
+
 
 def predict_ar_num(img):
     """Predict the digit from the provided image and return probabilities."""

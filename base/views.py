@@ -4,7 +4,7 @@ from PIL import Image
 import base64
 import io
 import json
-from .model import predict_en_num, predict_ar_num, predict_ar_char
+from .model import predict_en_num, predict_ar_num, predict_ar_char, predict_en_char
 
 def redirect_to_en(request):
     return redirect('ZeronineEN')
@@ -19,6 +19,9 @@ def zeronine_ar(request):
 # characters
 def zeronine_ar_char(request):
     return render(request, 'base/zeronine-ar-char.html')
+
+def zeronine_en_char(request):
+    return render(request, 'base/zeronine-en-char.html')
 
 def process_image(request):
     if 'image' in request.FILES:
@@ -60,3 +63,6 @@ def predict_zeronine_ar_num(request):
 # characters
 def predict_zeronine_ar_char(request):
     return predict_image(request, predict_ar_char)
+
+def predict_zeronine_en_char(request):
+    return predict_image(request, predict_en_char)
