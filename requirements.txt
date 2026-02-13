@@ -10,7 +10,7 @@ google-pasta==0.2.0
 grpcio==1.68.1
 h5py==3.12.1
 idna==3.10
-keras==3.13.1
+keras==3.13.2
 libclang==18.1.1
 Markdown==3.7
 markdown-it-py==3.0.0
@@ -30,7 +30,7 @@ rich==13.9.4
 scipy==1.14.1
 setuptools==78.1.1
 six==1.17.0
-sqlparse==0.5.3
+sqlparse==0.5.4
 tensorboard==2.18.0
 tensorboard-data-server==0.7.2
 tensorflow==2.18.0
