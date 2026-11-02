@@ -22,13 +22,13 @@ numpy==2.0.2
 opt_einsum==3.4.0
 optree==0.13.1
 packaging==24.2
-pillow==12.3.0
+pillow==13.0.0
 protobuf==6.33.5
 Pygments==2.20.0
 requests==2.33.0
 rich==13.9.4
 scipy==1.14.1
-setuptools==83.0.0
+setuptools==84.1.0
 six==1.17.0
 sqlparse==0.6.0
 tensorboard==2.18.0
